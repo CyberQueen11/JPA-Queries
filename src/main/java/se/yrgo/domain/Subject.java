@@ -9,7 +9,7 @@ import java.util.Set;
 public class Subject {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private String subjectName;
@@ -18,12 +18,12 @@ public class Subject {
     @ManyToMany
     private Set<Tutor> tutors;
 
-
-    public Subject() {}
+    public Subject() {
+    }
 
     public Subject(String subjectName, int numberOfSemesters) {
         this.subjectName = subjectName;
-        this.numberOfSemesters=numberOfSemesters;
+        this.numberOfSemesters = numberOfSemesters;
         this.tutors = new HashSet<>();
     }
 
@@ -39,5 +39,9 @@ public class Subject {
     public Set<Tutor> getTutors() {
         return this.tutors;
     }
-}
 
+    public int getNumberOfSemesters() {
+        return numberOfSemesters;
+    }
+
+}
