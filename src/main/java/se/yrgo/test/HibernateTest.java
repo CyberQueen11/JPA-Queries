@@ -61,6 +61,17 @@ public class HibernateTest {
 		 * UPPGIFT 4
 		 * Skriv en query som kan returnera max salary från tutor tabellen.
 		 */
+		TypedQuery<Integer> maxSalaryQuery = em.createQuery(
+				"SELECT MAX(t.salary) FROM Tutor t",
+				Integer.class);
+		Integer maxSalary = maxSalaryQuery.getSingleResult();
+		System.out.println("Max salary: " + maxSalary);
+
+		/*
+		 * UPPGIFT 5
+		 * Skriv en named query som kan returnera alla tutor som har 
+		 * en lön högre än 10000.
+		 */
 
 		tx.commit();
 		em.close();
