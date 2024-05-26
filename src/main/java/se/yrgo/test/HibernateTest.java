@@ -8,55 +8,55 @@ import se.yrgo.domain.Tutor;
 
 import java.util.List;
 
-public class HibernateTest
-{
-	public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("databaseConfig");
+public class HibernateTest {
+	public static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("databaseConfig");
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		setUpData();
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 
-		List<Student> results = em.createNamedQuery("searchByName", Student.class).setParameter("name", "Jimi Hendriks").getResultList();
-		for(Student student: results) {
-			System.out.println(student);
-		}
+		/*
+		 * UPPGIFT 1
+		 * Skriv en query för att få namnet på alla elever vars tutor kan undervisa i
+		 * science.
+		 */
+		Subject science = em.find(Subject.class, 2);
+		TypedQuery<String> query = em.createQuery(
+				"SELECT s.name FROM Student s WHERE :subject MEMBER OF s.tutor.subjectsToTeach", String.class);
+		query.setParameter("subject", science);
 
-		Query q = em.createQuery("select student.name from Student student");
-		List<String>results2 = q.getResultList();
-		for(String name:results2) {
+		List<String> scienceStudents = query.getResultList();
+		
+		for (String name : scienceStudents) {
 			System.out.println(name);
 		}
 
-		List<Object[]>results3 = em.createQuery("select student.name, student.enrollmentID from Student student").getResultList();
-		for(Object[] obj:results3) {
-			System.out.println("Name: " + obj[0]);
-			System.out.println("ID: " + obj[1]);
+		/*
+		 * UPPGIFT 2
+		 * Skriv en query för att hämta namnet på alla studenter och namnet på deras
+		 * handledare(tutor)
+		 */
+		List<Object[]> studentNameAndTutor = em
+				.createQuery(
+						"SELECT s.name AS studentName, t.name AS tutorName FROM Student s JOIN Tutor t ON s.tutor = t.id")
+				.getResultList();
+
+		for (Object[] result : studentNameAndTutor) {
+			String studentName = (String) result[0];
+			String tutorName = (String) result[1];
+			System.out.println("Student: " + studentName + ", Tutor: " + tutorName);
 		}
 
-		long numberOfStudents = (Long)em.createQuery("select count(student)from Student student").getSingleResult();
-		System.out.println("We have " + numberOfStudents + " students");
-
-		List<Object[]> results4 = em.createNativeQuery("select s.name,s.enrollmentid from student s").getResultList();
-		for(Object[] result: results4) {
-			System.out.println(result[0] + " ; " + result[1]);
-		}
-
-		List<Student>students = em.createNativeQuery("select * from student s", Student.class).getResultList();
-		for(Student student: students) {
-			System.out.println(student);
-		}
-		
 		tx.commit();
 		em.close();
 	}
 
-	public static void setUpData(){
+	public static void setUpData() {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
-
 
 		Subject mathematics = new Subject("Mathematics", 2);
 		Subject science = new Subject("Science", 2);
@@ -68,7 +68,6 @@ public class HibernateTest
 		Tutor t1 = new Tutor("ABC123", "Johan Smith", 40000);
 		t1.addSubjectsToTeach(mathematics);
 		t1.addSubjectsToTeach(science);
-
 
 		Tutor t2 = new Tutor("DEF456", "Sara Svensson", 20000);
 		t2.addSubjectsToTeach(mathematics);
@@ -82,7 +81,6 @@ public class HibernateTest
 		em.persist(t2);
 		em.persist(t3);
 
-
 		t1.createStudentAndAddtoTeachingGroup("Jimi Hendriks", "1-HEN-2019", "Street 1", "city 2", "1212");
 		t1.createStudentAndAddtoTeachingGroup("Bruce Lee", "2-LEE-2019", "Street 2", "city 2", "2323");
 		t3.createStudentAndAddtoTeachingGroup("Roger Waters", "3-WAT-2018", "Street 3", "city 3", "34343");
@@ -90,6 +88,5 @@ public class HibernateTest
 		tx.commit();
 		em.close();
 	}
-
 
 }

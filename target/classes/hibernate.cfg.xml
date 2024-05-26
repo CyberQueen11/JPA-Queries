@@ -9,7 +9,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
-        <property name="connection.url">jdbc:derby://localhost:50000/Hibernate</property>
+        <property name="connection.url">jdbc:derby://localhost:50000/hibernate</property>
 
         <!-- not needed if we're not using users and passes.
         <property name="connection.username"></property>

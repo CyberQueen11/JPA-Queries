@@ -24,7 +24,7 @@ public class Subject {
     public Subject(String subjectName, int numberOfSemesters) {
         this.subjectName = subjectName;
         this.numberOfSemesters=numberOfSemesters;
-        this.tutors = new HashSet<Tutor>();
+        this.tutors = new HashSet<>();
     }
 
     public String subjectName() {
