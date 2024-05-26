@@ -1,7 +1,7 @@
 package se.yrgo.test;
 
 import jakarta.persistence.*;
-
+import javassist.compiler.ast.DoubleConst;
 import se.yrgo.domain.Student;
 import se.yrgo.domain.Subject;
 import se.yrgo.domain.Tutor;
@@ -28,7 +28,7 @@ public class HibernateTest {
 		query.setParameter("subject", science);
 
 		List<String> scienceStudents = query.getResultList();
-		
+
 		for (String name : scienceStudents) {
 			System.out.println(name);
 		}
@@ -40,7 +40,7 @@ public class HibernateTest {
 		 */
 		List<Object[]> studentNameAndTutor = em
 				.createQuery(
-						"SELECT s.name AS studentName, t.name AS tutorName FROM Student s JOIN Tutor t ON s.tutor = t.id")
+						"SELECT s.name, t.name FROM Student s JOIN s.tutor t")
 				.getResultList();
 
 		for (Object[] result : studentNameAndTutor) {
@@ -48,6 +48,19 @@ public class HibernateTest {
 			String tutorName = (String) result[1];
 			System.out.println("Student: " + studentName + ", Tutor: " + tutorName);
 		}
+
+		/*
+		 * UPPGIFT 3
+		 * Använd aggregation för att få den genomsnittliga termins längden (average
+		 * semester) för ämnena(subjects).
+		 */
+		Double avgQuery = (Double) em.createQuery("SELECT AVG(s.numberOfSemesters) FROM Subject s").getSingleResult();
+		System.out.println("Average semester: " + avgQuery);
+
+		/*
+		 * UPPGIFT 4
+		 * Skriv en query som kan returnera max salary från tutor tabellen.
+		 */
 
 		tx.commit();
 		em.close();
