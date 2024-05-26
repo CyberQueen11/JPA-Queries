@@ -67,6 +67,10 @@ public class Tutor {
         return tutorId;
     }
 
+    public int getSalary() {
+        return salary;
+    }
+
     public String toString() {
         return name;
     }
