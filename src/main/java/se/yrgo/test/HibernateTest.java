@@ -72,10 +72,10 @@ public class HibernateTest {
 		 * Skriv en named query som kan returnera alla tutor som har
 		 * en lön högre än 10000.
 		 */
-		List<Tutor> tutorSalary = em.createNamedQuery("tutorSalary", Tutor.class).getResultList();
-		for (Tutor tutor : tutorSalary) {
+		List<Tutor> tutorsSalary = em.createNamedQuery("tutorSalary", Tutor.class).getResultList();
+		for (Tutor tutor : tutorsSalary) {
 			System.out.println(
-					"Tutor: " + tutor.getName() + ", Salary: " + tutor.getSalary());
+					"Tutor: " + tutor.getName() + " Salary: " + tutor.getSalary());
 		}
 
 		tx.commit();
