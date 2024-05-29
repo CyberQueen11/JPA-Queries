@@ -13,10 +13,6 @@ public class Student {
     private String enrollmentID;
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "TUTOR_FK")
-    private Tutor tutor;
-
     @Embedded
     private Address address;
 
@@ -32,6 +28,10 @@ public class Student {
         this.name = name;
         this.enrollmentID = enrollmentID;
         this.address = new Address(street, city, zipCode);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Address getAddress() {
