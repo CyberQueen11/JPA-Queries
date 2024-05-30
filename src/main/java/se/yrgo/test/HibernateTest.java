@@ -1,13 +1,11 @@
 package se.yrgo.test;
 
 import jakarta.persistence.*;
-import javassist.compiler.ast.DoubleConst;
 import se.yrgo.domain.Student;
 import se.yrgo.domain.Subject;
 import se.yrgo.domain.Tutor;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class HibernateTest {
 	public static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("databaseConfig");
@@ -24,19 +22,17 @@ public class HibernateTest {
 		 * science.
 		 */
 		System.out.println("\n--Uppgift 1--");
+
 		Subject science = em.find(Subject.class, 2);
 
-		TypedQuery<Object[]> query = em.createQuery(
-				"SELECT s.name, t.name FROM Tutor t JOIN t.teachingGroup s WHERE :subject MEMBER OF t.subjectsToTeach",
-				Object[].class);
-		query.setParameter("subject", science);
+		Query query = em.createQuery(
+				"SELECT t.teachingGroup FROM Tutor t WHERE :subject MEMBER OF t.subjectsToTeach")
+				.setParameter("subject", science);
 
-		List<Object[]> results = query.getResultList();
+		List<Student> students = query.getResultList();
 
-		for (Object[] result : results) {
-			String studentName = (String) result[0];
-			String tutorName = (String) result[1];
-			System.out.println("Student: " + studentName + ", Tutor: " + tutorName);
+		for (Student s : students) {
+			System.out.println(s);
 		}
 
 		/*
