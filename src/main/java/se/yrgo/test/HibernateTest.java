@@ -32,7 +32,7 @@ public class HibernateTest {
 		List<Student> students = query.getResultList();
 
 		for (Student s : students) {
-			System.out.println(s);
+			System.out.println(s.getName());
 		}
 
 		/*
