@@ -25,19 +25,18 @@ public class HibernateTest {
 		 */
 		System.out.println("\n--Uppgift 1--");
 		Subject science = em.find(Subject.class, 2);
-		TypedQuery<Tutor> query = em.createQuery(
-				"FROM Tutor t WHERE :subject MEMBER OF t.subjectsToTeach", Tutor.class);
+
+		TypedQuery<Object[]> query = em.createQuery(
+				"SELECT s.name, t.name FROM Tutor t JOIN t.teachingGroup s WHERE :subject MEMBER OF t.subjectsToTeach",
+				Object[].class);
 		query.setParameter("subject", science);
 
-		List<Tutor> scienceTutors = query.getResultList();
+		List<Object[]> results = query.getResultList();
 
-		for (Tutor tutor : scienceTutors) {
-			System.out.println(tutor.getName() + " tutors: ");
-			Set<Student> teachingGroup = tutor.getTeachingGroup();
-			for (Student student : teachingGroup) {
-				System.out.println("Student: " + student.getName());
-			}
-			System.out.println();
+		for (Object[] result : results) {
+			String studentName = (String) result[0];
+			String tutorName = (String) result[1];
+			System.out.println("Student: " + studentName + ", Tutor: " + tutorName);
 		}
 
 		/*
